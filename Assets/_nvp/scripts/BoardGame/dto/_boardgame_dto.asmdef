@@ -1,0 +1,10 @@
+{
+    "name": "_boardgame_dto",
+    "references": [
+        "_boardgame_enums"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
