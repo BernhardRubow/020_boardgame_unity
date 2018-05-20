@@ -1,10 +1,7 @@
 {
     "name": "_boardgame_tests",
     "references": [
-        "_boardgame_dto",
-        "_boardgame_enums",
-        "_boardgame_interfaces",
-        "_boardgame_rules"
+        "_boardgame"
     ],
     "optionalUnityReferences": [
         "TestAssemblies"
