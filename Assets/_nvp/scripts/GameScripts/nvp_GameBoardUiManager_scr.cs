@@ -16,10 +16,14 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour {
 	public Transform[] endPositionsYellow;
 	public Transform[] endPositionsGreen;
 
+  [SerializeField] private nvp_SelectTurnUiManager_scr _selectTurnUI;
 
 	// Use this for initialization
 	void Start () {
 		
+    // subscribe to events
+    _selectTurnUI.OnButtonClicked += OnSelectTurnButtonClicked;
+
 	}
 	
 	// Update is called once per frame
@@ -56,6 +60,10 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour {
       startPositions[i] = GameObject.Find(color + "_" + i.ToString()).transform;
     }
 		return startPositions;
+  }
+
+  private void OnSelectTurnButtonClicked(int index){
+    Debug.Log(string.Format("Button {0} pressed", index));
   }
 
 
