@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class nvp_SelectTurnUiManager_scr : MonoBehaviour {
 
 	public delegate void ButtonClickedEvent(int index);
-	public ButtonClickedEvent OnButtonClicked;	
+	public event ButtonClickedEvent OnButtonClicked;	
 
 	[SerializeField] private Button[] _selectButtons;
 

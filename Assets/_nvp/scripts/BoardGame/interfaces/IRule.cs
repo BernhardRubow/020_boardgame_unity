@@ -5,14 +5,13 @@ using System.Text;
 using newvisionsproject.boardgame.dto;
 using newvisionsproject.boardgame.enums;
 
-namespace BoardGame.interfaces
+namespace newvisionsproject.boardgame.interfaces
 {
-    namespace newvisionsproject.boardgame.interfaces
-    {
-        public interface IRule
-        {
-            IRule SetNextRule(IRule nextRule);
-            CheckMovesResult CheckRule(CheckMovesResult result);
-        }
-    }
+
+  public interface IRule
+  {
+    IRule SetNextRule(IRule nextRule);
+    CheckMovesResult CheckRule(CheckMovesResult result);
+  }
+
 }

@@ -3,7 +3,7 @@ using System.Linq;
 using newvisionsproject.boardgame.dto;
 using newvisionsproject.boardgame.enums;
 
-namespace BoardGame.gameLogic
+namespace newvisionsproject.boardgame.gameLogic
 {
     public static class nvp_RuleHelper
     {

@@ -1,7 +1,7 @@
-using BoardGame.interfaces.newvisionsproject.boardgame.interfaces;
+using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.dto;
 
-namespace BoardGame.gameLogic
+namespace newvisionsproject.boardgame.gameLogic
 {
     public class nvp_Rule_10_GetsAdditionalRuleOn6 : IRule
     {

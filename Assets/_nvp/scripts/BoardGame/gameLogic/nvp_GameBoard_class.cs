@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BoardGame.interfaces.newvisionsproject.boardgame.interfaces;
+using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.dto;
 using newvisionsproject.boardgame.enums;
 
-namespace BoardGame.gameLogic
+namespace newvisionsproject.boardgame.gameLogic
 {
     public class nvp_GameBoard_class
     {

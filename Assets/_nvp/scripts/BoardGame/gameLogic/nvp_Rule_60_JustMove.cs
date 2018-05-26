@@ -1,8 +1,8 @@
 using System.Linq;
-using BoardGame.interfaces.newvisionsproject.boardgame.interfaces;
+using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.dto;
 
-namespace BoardGame.gameLogic
+namespace newvisionsproject.boardgame.gameLogic
 {
     public class nvp_Rule_60_JustMove : IRule
     {

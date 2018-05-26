@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BoardGame.gameLogic;
+using newvisionsproject.boardgame.gameLogic;
 using newvisionsproject.boardgame.dto;
 using newvisionsproject.boardgame.enums;
 using NUnit.Framework;
