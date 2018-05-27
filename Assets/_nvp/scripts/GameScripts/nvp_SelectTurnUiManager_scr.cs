@@ -2,22 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using newvisionsproject.boardgame.delegates;
+using newvisionsproject.boardgame.dto;
+using newvisionsproject.boardgame.interfaces;
 
+public class nvp_SelectTurnUiManager_scr : MonoBehaviour, IPlayerMoveSelector	 {
 
-public class nvp_SelectTurnUiManager_scr : MonoBehaviour {
-
-	public delegate void ButtonClickedEvent(int index);
-	public event ButtonClickedEvent OnButtonClicked;	
-
+	// +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	[SerializeField] private Button[] _selectButtons;
+	[SerializeField] private GameObject PlayerMoveCalculatorComponent;
+	private IPlayerMoveCalculator _playerMoveCalculator;
 
-	
-	void Start () {
-		ActivateButtons(2);
-	}
-	
-	void Update () {
+  
+  // +++ events exposed +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public event PlayerMoveSelectorDelegate OnPlayerMoveSected;
+
+
+  // +++ unity callbacks ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  void Start () {
+		SubscribeToEvents();
 		
+	}
+
+
+	// +++ event handler ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public void OnSelectButtonClicked(int index){
+		DeactivateButtons();
+		if(OnPlayerMoveSected != null) OnPlayerMoveSected(index);
+	}
+
+	private void OnPlayerMovesCalculated(CheckMovesResult result){
+		DeactivateButtons();
+		if(result.CanMove) ActivateButtons(result.PossibleMoves.Count);
+	}
+
+
+	// +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public void SubscribeToEvents(){
+		_playerMoveCalculator = PlayerMoveCalculatorComponent
+			.GetComponent<IPlayerMoveCalculator>();
+		
+		_playerMoveCalculator.OnPlayerMovesCalculated += OnPlayerMovesCalculated;
 	}
 
 	public void ActivateButtons(int numberOfButtons){
@@ -31,7 +56,9 @@ public class nvp_SelectTurnUiManager_scr : MonoBehaviour {
 		}
 	}
 
-	public void OnSelectButtonClicked(int index){
-		if(OnButtonClicked != null) OnButtonClicked(index);
+	public void DeactivateButtons(){
+		for(int i = 0, n = 4; i < n; i++) {
+			_selectButtons[i].gameObject.SetActive(false);
+		}
 	}
 }

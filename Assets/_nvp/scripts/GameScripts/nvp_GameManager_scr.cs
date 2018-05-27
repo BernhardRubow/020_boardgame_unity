@@ -3,30 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.gameLogic;
+using newvisionsproject.boardgame.delegates;
+using newvisionsproject.boardgame.dto;
+
+public class nvp_GameManager_scr : MonoBehaviour, IPlayerMoveCalculator, IPlayerFigureMover
+{
+
+  // +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  public GameObject DiceRollerComponent;
+  public GameObject MoveSelectorComponent;
+  private nvp_GameBoard_class _gameLogic;
+  private CheckMovesResult _lastCalculatedMoveResult;
 
 
-public class nvp_GameManager_scr : MonoBehaviour {
-
-	public GameObject IDiceRoller;
-	private IDiceRoller _iDiceRoller;
-	private nvp_GameBoard_class _gameLogic;
+  // +++ events exposed +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  public event PlayerMovesCalculatedDelegate OnPlayerMovesCalculated = delegate { };
+	public event PlayerFigureMovedDelegate OnPlayerFigureMoved = delegate {};
 
 
-	// Use this for initialization
-	void Start () {
-		_iDiceRoller = IDiceRoller.GetComponent<IDiceRoller>();	
-		_iDiceRoller.OnDiceRollHappened += OnPlayerDiceRoll;
+  // +++ unity callbacks ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  void Start()
+  {
+    SubscribeToEvents();
 
-		_gameLogic = new nvp_GameBoard_class(4);
+    _gameLogic = new nvp_GameBoard_class(4);
+  }
+
+
+  // +++ event handler ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	void OnPlayerMoveSected(int index){
+		_gameLogic.Move(_lastCalculatedMoveResult, index);
+
+		// invoke event
+		OnPlayerFigureMoved();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+  void OnPlayerDiceRoll(PlayerDiceRoll diceRoll)
+  {
+    _lastCalculatedMoveResult = _gameLogic.CheckPossiblePlayerMoves(
+      diceRoll.playerColor,
+      diceRoll.diceValue
+    );
 
-	void OnPlayerDiceRoll(PlayerDiceRoll diceRoll){
-		Debug.Log(string.Format("dice value: {0}", diceRoll.diceValue));
-		Debug.Log(string.Format("PlayerColor: {0}", diceRoll.playerColor));
-	}
+		// invoke event
+    OnPlayerMovesCalculated(_lastCalculatedMoveResult);
+  }
+
+
+  // +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  private void SubscribeToEvents()
+  {
+    DiceRollerComponent
+			.GetComponent<IDiceRoller>()
+    		.OnDiceRollHappened += OnPlayerDiceRoll;
+
+		MoveSelectorComponent
+			.GetComponent<IPlayerMoveSelector>()
+				.OnPlayerMoveSected += OnPlayerMoveSected;
+  }
 }
