@@ -23,32 +23,37 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
   [SerializeField] private GameObject _playerMoveSelectorComponent;
   [SerializeField] private GameObject _playerMoveCalculatorComponent;
   private CheckMovesResult _lastCalculatedMoveResult;
-  private int _selectedMove;
+  private int _selectedMoveIndex;
 
   // +++ unity callbacks ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   void Start()
   {
-
-    // subscribe to events
     SubscribeToEvents();
   }
 
-  void Update()
-  {
-
-  }
 
   // +++ event handler ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   void OnPlayerFigureMoved()
   {
-    var playerfigure = _lastCalculatedMoveResult.PlayerFigures.Single(x =>
-      x.Color == _lastCalculatedMoveResult.PlayerColor
-      && x.Index == _lastCalculatedMoveResult.PossibleMoves[_selectedMove].Index);
+    var moveToMake = _lastCalculatedMoveResult.PossibleMoves[_selectedMoveIndex];
+
+    var playerfigure = _lastCalculatedMoveResult.PlayerFigures.Single(
+        x => x.Color == moveToMake.Color
+        && x.Index == moveToMake.Index); 
+
+    var playerFigureTransform = GameObject
+      .Find(string.Format("player_{0}_{1}",moveToMake.Color,moveToMake.Index))
+      .transform;
+
+    playerFigureTransform.parent = _fieldPositions[playerfigure.WorldPosition];
+    playerFigureTransform.localPosition = Vector3.zero;
+    
+
 
     Debug.Log(
       string.Format("Player {0} moves figure {1} to position {2}"
-        , _lastCalculatedMoveResult.PossibleMoves[_selectedMove].Color
-        , _lastCalculatedMoveResult.PossibleMoves[_selectedMove].Index
+        , moveToMake.Color
+        , string.Format("player_{0}_{1}",moveToMake.Color,moveToMake.Index)
         , playerfigure.WorldPosition
       )
     );
@@ -56,13 +61,14 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
 
   void OnPlayerMoveSected(int index)
   {
-    _selectedMove = index;    
+    _selectedMoveIndex = index;    
   }
 
   void OnPlayerMovesCalculated(CheckMovesResult result)
   {
     _lastCalculatedMoveResult = result;
   }
+
 
   // +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   void SubscribeToEvents()

@@ -28,9 +28,6 @@ public class nvp_PlayerMovesDisplay_scr : MonoBehaviour {
 	// +++ event handler ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	void OnPlayerMovesCalculate(CheckMovesResult result)
 	{
-		// Debug.Log(string.Format("can move: {0}", result.CanMove));
-		// Debug.Log(string.Format("add move: {0}", result.AdditionalRollGranted));
-		// Debug.Log(string.Format("moves   : {0}", result.PossibleMoves.Count));
 		Clear();
 		for(int i = 0, n = result.PossibleMoves.Count; i < n; i++){
 			_moveTexts[i].text = string.Format(
