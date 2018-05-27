@@ -4923,12 +4923,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1502286646}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1516098867 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114308584091660642, guid: a3a40f1f1bcb2504b8851e9d3ab27c4e,
-    type: 2}
-  m_PrefabInternal: {fileID: 1279142274}
-  m_Script: {fileID: 11500000, guid: 42c53a89d4e6fa14bb559f98b7c6772e, type: 3}
 --- !u!1 &1658772140
 GameObject:
   m_ObjectHideFlags: 0
@@ -7357,7 +7351,8 @@ MonoBehaviour:
   - {fileID: 1360654899}
   - {fileID: 614217616}
   - {fileID: 2053474171}
-  _selectTurnUI: {fileID: 1516098867}
+  _playerMoveSelectorComponent: {fileID: 128152218}
+  _playerMoveCalculatorComponent: {fileID: 987722564}
 --- !u!4 &2113969591
 Transform:
   m_ObjectHideFlags: 0
