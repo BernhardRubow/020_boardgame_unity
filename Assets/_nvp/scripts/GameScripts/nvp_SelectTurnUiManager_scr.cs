@@ -33,11 +33,24 @@ public class nvp_SelectTurnUiManager_scr : MonoBehaviour, IPlayerMoveSelector	 {
 
 	private void OnPlayerMovesCalculated(CheckMovesResult result){
 		DeactivateButtons();
-		if(result.CanMove) ActivateButtons(result.PossibleMoves.Count);
+
+		if(result.CanMove) 
+		{
+			if(result.PossibleMoves.Count > 1) {
+				ActivateButtons(result.PossibleMoves.Count);
+			}
+			else{
+				Invoke("InvokeTurn", 0.1f);
+			}
+		}
 	}
 
 
 	// +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public void InvokeTurn()
+	{
+		OnSelectButtonClicked(0);
+	}
 	public void SubscribeToEvents(){
 		_playerMoveCalculator = PlayerMoveCalculatorComponent
 			.GetComponent<IPlayerMoveCalculator>();

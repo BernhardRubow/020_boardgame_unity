@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using newvisionsproject.boardgame.dto;
@@ -51,6 +52,11 @@ namespace newvisionsproject.boardgame.gameLogic
             return playerFigures.SingleOrDefault(x => x.WorldPosition == worldPosition);
         }
 
+        public static List<PlayerFigure> GetFiguresOnWorldPosition(List<PlayerFigure> playerFigures, int worldPosition)
+        {
+            return playerFigures.Where(x => x.WorldPosition == worldPosition).ToList();
+        }
+
         public static List<PlayerFigure> GetFiguresOnBoardByColor(PlayerColors playerColor, List<PlayerFigure> playerfigures, int diceValue)
         {
             var list = playerfigures.Where(x => 
@@ -59,5 +65,11 @@ namespace newvisionsproject.boardgame.gameLogic
                 x.LocalPosition + diceValue < 45).ToList();
             return list;
         }
+
+    public static PlayerFigure GetPlayerFigure(List<PlayerFigure> playerFigures, PlayerColors playerColor, int playerIndex)
+    {
+      var figure = playerFigures.Single(x => x.Color == playerColor && x.Index == playerIndex);
+      return figure;
     }
+  }
 }

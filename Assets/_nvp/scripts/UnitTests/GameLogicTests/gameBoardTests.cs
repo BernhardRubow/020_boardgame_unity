@@ -601,6 +601,45 @@ namespace newvisionsproject.boardgame.tests
             Assert.AreEqual(2, pf.Index);
         }
 
+        [Test]
+        public void test_throwing_out_black_player(){
+
+            var player_red_0 = nvp_RuleHelper.GetPlayerFigure(_gameboard.playerFigures, PlayerColors.red, 0);
+            var player_black_0 = nvp_RuleHelper.GetPlayerFigure(_gameboard.playerFigures, PlayerColors.black, 0);
+
+            // move black player to position
+            CheckMovesResult result = null;
+            var diceRolls = new[] { "b6","b1","r6", "r6" };
+            for (int i = 0, n = diceRolls.Length; i < n; i++)
+            {
+                result = CheckRules(diceRolls[i]);
+                if (!result.CanMove) break;
+                result = result.PossibleMoves.Count == 1 
+                    ? _gameboard.Move(CheckRules(diceRolls[i])) 
+                    : _gameboard.Move(CheckRules(diceRolls[i]), 0);
+            }
+
+            Assert.AreEqual(1, player_black_0.LocalPosition);
+            Assert.AreEqual(11, player_black_0.WorldPosition);
+            Assert.AreEqual(6, player_red_0.LocalPosition);
+            Assert.AreEqual(6, player_red_0.WorldPosition);
+
+            diceRolls = new[] { "r5" };
+            for (int i = 0, n = diceRolls.Length; i < n; i++)
+            {
+                result = CheckRules(diceRolls[i]);
+                if (!result.CanMove) break;
+                result = result.PossibleMoves.Count == 1 
+                    ? _gameboard.Move(CheckRules(diceRolls[i])) 
+                    : _gameboard.Move(CheckRules(diceRolls[i]), 0);
+            }
+
+            Assert.AreEqual(-1, player_black_0.LocalPosition);
+            Assert.AreEqual(-1, player_black_0.WorldPosition);
+            Assert.AreEqual(11, player_red_0.LocalPosition);
+            Assert.AreEqual(11, player_red_0.WorldPosition);
+        }
+
 
 
 

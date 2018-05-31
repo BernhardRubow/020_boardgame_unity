@@ -1,4 +1,5 @@
 ﻿using newvisionsproject.boardgame.enums;
+using newvisionsproject.boardgame.gameLogic;
 
 namespace newvisionsproject.boardgame.dto
 {

@@ -62,6 +62,17 @@ namespace newvisionsproject.boardgame.gameLogic
                 x.Color == move.Color && 
                 x.Index == move.Index);
             figure.Move(move.DiceValue);
+
+            // check for killing other player
+            var figuresOnWorldPosition = nvp_RuleHelper.GetFiguresOnWorldPosition(movesInfo.PlayerFigures, figure.WorldPosition)
+                .Where(x => x.Color != figure.Color).ToList();
+
+            if(figuresOnWorldPosition.Count > 0){
+                figuresOnWorldPosition[0].LocalPosition = -1;
+                figuresOnWorldPosition[0].WorldPosition = -1;
+            }
+
+
             return movesInfo;
         }
 
