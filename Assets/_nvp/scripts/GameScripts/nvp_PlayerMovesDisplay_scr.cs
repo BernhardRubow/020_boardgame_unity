@@ -40,8 +40,6 @@ public class nvp_PlayerMovesDisplay_scr : MonoBehaviour {
 	}
 	
 
-
-
 	// +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	void SubscribeToEvents(){
 		_playerMoveCalculatorComponent

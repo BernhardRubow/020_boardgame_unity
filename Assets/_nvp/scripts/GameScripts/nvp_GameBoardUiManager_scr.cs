@@ -5,25 +5,26 @@ using System;
 using System.Linq;
 using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.dto;
+using newvisionsproject.boardgame.enums;
 
 public class nvp_GameBoardUiManager_scr : MonoBehaviour
 {
 
-  // +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  [SerializeField] private Transform[] _fieldPositions;
-  public Transform[] startPositionsRed;
-  public Transform[] startPositionsBlack;
-  public Transform[] startPositionsYellow;
-  public Transform[] startPositionsGreen;
-  public Transform[] endPositionsRed;
-  public Transform[] endPositionsBlack;
-  public Transform[] endPositionsYellow;
-  public Transform[] endPositionsGreen;
-
-  [SerializeField] private GameObject _playerMoveSelectorComponent;
-  [SerializeField] private GameObject _playerMoveCalculatorComponent;
-  private CheckMovesResult _lastCalculatedMoveResult;
-  private int _selectedMoveIndex;
+  // +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+  public Transform[] startPositionsRed;                             // positions in the red house
+  public Transform[] startPositionsBlack;                           // positions in the black house
+  public Transform[] startPositionsYellow;                          // positions in the yellow house
+  public Transform[] startPositionsGreen;                           // positions in the green house
+  public Transform[] endPositionsRed;                               // positions in red safe zone 
+  public Transform[] endPositionsBlack;                             // positions in black safe zone
+  public Transform[] endPositionsYellow;                            // positions in yellow safe zone
+  public Transform[] endPositionsGreen;                             // positions in green safe zone
+  public Transform[] playerFigures;                                 // reference to player figures
+  [SerializeField] private Transform[] _fieldPositions;             // all positions of the track on the gameboard
+  [SerializeField] private GameObject _playerMoveSelectorComponent;   // holds IPlayerMoveSelector implementation
+  [SerializeField] private GameObject _playerMoveCalculatorComponent; // holds IPlayerMoveCalculator and IPlayerFigureMover
+  private CheckMovesResult _lastCalculatedMoveResult;               // stores the last calculated move result for a player
+  private int _selectedMoveIndex;                                   // stores the last selected move
 
   // +++ unity callbacks ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   void Start()
@@ -35,28 +36,8 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
   // +++ event handler ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   void OnPlayerFigureMoved()
   {
-    var moveToMake = _lastCalculatedMoveResult.PossibleMoves[_selectedMoveIndex];
+    MoveAllPlayerFigures();
 
-    var playerfigure = _lastCalculatedMoveResult.PlayerFigures.Single(
-        x => x.Color == moveToMake.Color
-        && x.Index == moveToMake.Index); 
-
-    var playerFigureTransform = GameObject
-      .Find(string.Format("player_{0}_{1}",moveToMake.Color,moveToMake.Index))
-      .transform;
-
-    playerFigureTransform.parent = _fieldPositions[playerfigure.WorldPosition];
-    playerFigureTransform.localPosition = Vector3.zero;
-    
-
-
-    Debug.Log(
-      string.Format("Player {0} moves figure {1} to position {2}"
-        , moveToMake.Color
-        , string.Format("player_{0}_{1}",moveToMake.Color,moveToMake.Index)
-        , playerfigure.WorldPosition
-      )
-    );
   }
 
   void OnPlayerMoveSected(int index)
@@ -67,6 +48,11 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
   void OnPlayerMovesCalculated(CheckMovesResult result)
   {
     _lastCalculatedMoveResult = result;
+  }
+
+  private void OnSelectTurnButtonClicked(int index)
+  {
+    Debug.Log(string.Format("Button {0} pressed", index));
   }
 
 
@@ -96,29 +82,50 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
       _fieldPositions[i] = fieldList.Single(x => x.name.Contains(i.ToString("00"))).transform;
     }
 
-    startPositionsRed = GetStartPositions("red");
-    startPositionsBlack = GetStartPositions("black");
-    startPositionsYellow = GetStartPositions("yellow");
-    startPositionsGreen = GetStartPositions("green");
+    startPositionsRed = GetSpecialFieldPositionByName("red");
+    startPositionsBlack = GetSpecialFieldPositionByName("black");
+    startPositionsYellow = GetSpecialFieldPositionByName("yellow");
+    startPositionsGreen = GetSpecialFieldPositionByName("green");
 
-    endPositionsRed = GetStartPositions("red_safe");
-    endPositionsBlack = GetStartPositions("black_safe");
-    endPositionsYellow = GetStartPositions("yellow_safe");
-    endPositionsGreen = GetStartPositions("green_safe");
+    endPositionsRed = GetSpecialFieldPositionByName("red_safe");
+    endPositionsBlack = GetSpecialFieldPositionByName("black_safe");
+    endPositionsYellow = GetSpecialFieldPositionByName("yellow_safe");
+    endPositionsGreen = GetSpecialFieldPositionByName("green_safe");
   }
 
-  private Transform[] GetStartPositions(string color)
+  private Transform[] GetSpecialFieldPositionByName(string name)
   {
     var startPositions = new Transform[4];
     for (int i = 0, n = 4; i < n; i++)
     {
-      startPositions[i] = GameObject.Find(color + "_" + i.ToString()).transform;
+      startPositions[i] = GameObject.Find(name + "_" + i.ToString()).transform;
     }
     return startPositions;
   }
 
-  private void OnSelectTurnButtonClicked(int index)
+  private void MoveAllPlayerFigures()
   {
-    Debug.Log(string.Format("Button {0} pressed", index));
+    foreach (var playerFigure in _lastCalculatedMoveResult.PlayerFigures)
+    {
+
+      var playerFigureTransform = GameObject
+      .Find(string.Format("player_{0}_{1}", playerFigure.Color, playerFigure.Index))
+      .transform;
+
+      if (playerFigure.WorldPosition >= 0)
+      {
+        playerFigureTransform.parent = _fieldPositions[playerFigure.WorldPosition];
+      }
+
+      if (playerFigure.WorldPosition < 0)
+      {
+        if (playerFigure.Color == PlayerColors.red) playerFigureTransform.parent = startPositionsRed[playerFigure.Index];
+        if (playerFigure.Color == PlayerColors.black) playerFigureTransform.parent = startPositionsBlack[playerFigure.Index];
+        if (playerFigure.Color == PlayerColors.yellow) playerFigureTransform.parent = startPositionsYellow[playerFigure.Index];
+        if (playerFigure.Color == PlayerColors.green) playerFigureTransform.parent = startPositionsGreen[playerFigure.Index];
+      }
+
+      playerFigureTransform.localPosition = Vector3.zero;
+    }
   }
 }

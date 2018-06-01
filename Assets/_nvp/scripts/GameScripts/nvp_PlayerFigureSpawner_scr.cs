@@ -6,11 +6,12 @@ using newvisionsproject.boardgame.enums;
 
 public class nvp_PlayerFigureSpawner_scr : MonoBehaviour {
 
+	// +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	[SerializeField] PlayerColors _playerColor;
 	[SerializeField] GameObject _playerPrefab;
 
 
-	// Use this for initialization
+	// +++ unity callbacks ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	void Start () {
 
 		var uiManagerScript = GameObject.Find("gameboardUiManager").GetComponent<nvp_GameBoardUiManager_scr>();
@@ -40,6 +41,8 @@ public class nvp_PlayerFigureSpawner_scr : MonoBehaviour {
 		Spawn(locations, name);
 	}
 
+
+	// +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   private void Spawn(Transform[] locations, string name)
   {
     for (int i = 0, n = 4; i < n; i++)

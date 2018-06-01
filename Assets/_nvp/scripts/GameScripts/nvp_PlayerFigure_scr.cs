@@ -5,18 +5,11 @@ using newvisionsproject.boardgame.enums;
 
 public class nvp_PlayerFigure_scr : MonoBehaviour {
 
+	// +++ fields +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	[SerializeField] private Material[] _playerMaterials;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
+	// +++ custom methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	public void SetPlayerColor(PlayerColors playerColor){
 
 		switch (playerColor)
