@@ -49,12 +49,12 @@ namespace newvisionsproject.boardgame.gameLogic
 
         public static PlayerFigure GetFigureOnWorldPosition(List<PlayerFigure> playerFigures, int worldPosition)
         {
-            return playerFigures.SingleOrDefault(x => x.WorldPosition == worldPosition);
+            return playerFigures.SingleOrDefault(x => x.WorldPosition == worldPosition && x.LocalPosition < 40);
         }
 
         public static List<PlayerFigure> GetFiguresOnWorldPosition(List<PlayerFigure> playerFigures, int worldPosition)
         {
-            return playerFigures.Where(x => x.WorldPosition == worldPosition).ToList();
+            return playerFigures.Where(x => x.WorldPosition == worldPosition && x.LocalPosition < 40).ToList();
         }
 
         public static List<PlayerFigure> GetFiguresOnBoardByColor(PlayerColors playerColor, List<PlayerFigure> playerfigures, int diceValue)
@@ -62,13 +62,16 @@ namespace newvisionsproject.boardgame.gameLogic
             var list = playerfigures.Where(x => 
                 x.Color == playerColor && 
                 x.LocalPosition > 0 && 
-                x.LocalPosition + diceValue < 45).ToList();
+                x.LocalPosition + diceValue < 44).ToList();
             return list;
         }
 
     public static PlayerFigure GetPlayerFigure(List<PlayerFigure> playerFigures, PlayerColors playerColor, int playerIndex)
     {
-      var figure = playerFigures.Single(x => x.Color == playerColor && x.Index == playerIndex);
+      var figure = playerFigures.Single(x => 
+        x.Color == playerColor && 
+        x.Index == playerIndex &&
+        x.LocalPosition < 44);
       return figure;
     }
   }

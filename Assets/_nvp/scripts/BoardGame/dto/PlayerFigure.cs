@@ -46,7 +46,7 @@ namespace newvisionsproject.boardgame.dto
                 WorldPosition += diceValue;
 
                 // the track on the gameboard is endless with 40 fields.
-                WorldPosition %= 41;
+                WorldPosition %= 40;
             }
         }
     }

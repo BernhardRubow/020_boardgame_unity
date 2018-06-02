@@ -36,12 +36,13 @@ public class nvp_SelectTurnUiManager_scr : MonoBehaviour, IPlayerMoveSelector	 {
 
 		if(result.CanMove) 
 		{
-			if(result.PossibleMoves.Count > 1) {
-				ActivateButtons(result.PossibleMoves.Count);
-			}
-			else{
-				Invoke("InvokeTurn", 0.1f);
-			}
+			Invoke("InvokeTurn", 0.1f);
+			// if(result.PossibleMoves.Count > 1) {
+			// 	ActivateButtons(result.PossibleMoves.Count);
+			// }
+			// else{
+			// 	Invoke("InvokeTurn", 0.1f);
+			// }
 		}
 	}
 

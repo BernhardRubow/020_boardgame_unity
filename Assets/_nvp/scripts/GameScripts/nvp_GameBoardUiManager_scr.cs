@@ -112,12 +112,12 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
       .Find(string.Format("player_{0}_{1}", playerFigure.Color, playerFigure.Index))
       .transform;
 
-      if (playerFigure.WorldPosition >= 0)
+      if (playerFigure.LocalPosition >= 0 && playerFigure.LocalPosition < 40)
       {
-        playerFigureTransform.parent = _fieldPositions[playerFigure.WorldPosition];
+        playerFigureTransform.parent = _fieldPositions[playerFigure.WorldPosition%40];
       }
 
-      if (playerFigure.WorldPosition < 0)
+      if (playerFigure.LocalPosition < 0)
       {
         if (playerFigure.Color == PlayerColors.red) playerFigureTransform.parent = startPositionsRed[playerFigure.Index];
         if (playerFigure.Color == PlayerColors.black) playerFigureTransform.parent = startPositionsBlack[playerFigure.Index];
@@ -125,7 +125,28 @@ public class nvp_GameBoardUiManager_scr : MonoBehaviour
         if (playerFigure.Color == PlayerColors.green) playerFigureTransform.parent = startPositionsGreen[playerFigure.Index];
       }
 
+      if(playerFigure.LocalPosition >=40 && playerFigure.LocalPosition <= 43){
+        var posArray = GetArrayByColor(playerFigure.Color);
+        playerFigureTransform.parent = posArray[playerFigure.LocalPosition -40];
+      }
       playerFigureTransform.localPosition = Vector3.zero;
+      playerFigureTransform.parent = null;
+    }
+  }
+
+  private Transform[] GetArrayByColor(PlayerColors color)
+  {
+    switch(color){
+      case PlayerColors.red:
+        return endPositionsRed;
+      case PlayerColors.black:
+        return endPositionsBlack;
+      case PlayerColors.green:
+        return endPositionsGreen;
+      case PlayerColors.yellow:
+        return endPositionsYellow;
+      default:
+        return null;
     }
   }
 }

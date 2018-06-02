@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System;
+using System.Linq;
 using newvisionsproject.boardgame.interfaces;
 using newvisionsproject.boardgame.dto;
 
@@ -17,6 +19,7 @@ namespace newvisionsproject.boardgame.gameLogic
         {
             // get players on board
             var ownFigures = nvp_RuleHelper.GetFiguresOnBoardByColor(result.PlayerColor, result.PlayerFigures, result.DiceValue);
+            ownFigures = ownFigures.Where(x => x.LocalPosition < 40).ToList();
 
             if (ownFigures.Count == 0) return _nextRule.CheckRule(result);
 
@@ -35,7 +38,7 @@ namespace newvisionsproject.boardgame.gameLogic
         {
             int worlPositionToCheck = (figureToCheck.WorldPosition + result.DiceValue)%41;
             PlayerFigure playerFigureFound = nvp_RuleHelper.GetFigureOnWorldPosition(result.PlayerFigures, worlPositionToCheck);
-            if (playerFigureFound == null || (playerFigureFound != null && playerFigureFound.Color == result.PlayerColor))
+            if (playerFigureFound == null || playerFigureFound.Color == result.PlayerColor || playerFigureFound.LocalPosition > 39)
             {
                 return false;
             }
